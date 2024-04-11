@@ -101,9 +101,6 @@ class DiscStorage():
         self._meta['cooler'] = self.cooler_name
         self._meta['window_size'] = window_size
         self._meta['maps'] = '.maps.npy'
-        self._meta['features'] = [
-            ft.to_dict() for ft in self.features
-        ]
 
         self.clr = cooler.Cooler(f'{self.storage_path}/{self.cooler_name}::resolutions/{resolution}')
 
@@ -146,6 +143,9 @@ class DiscStorage():
         for feature in self.features:
             feature.save_memmap()
             feature.generate_meta(self._meta['length'])
+        self._meta['features'] = [
+            ft.to_dict() for ft in self.features
+        ]
 
         with open(f'{self.storage_path}/index.json', 'w') as outf:
             json.dump({key: obj.to_dict() for key, obj in self._index.items()}, outf)
