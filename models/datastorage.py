@@ -147,7 +147,7 @@ class DiscStorage():
             feature.save_memmap()
 
         with open(f'{self.storage_path}/index.json', 'w') as outf:
-            json.dump({key: obj.do_dict() for key, obj in self._index.items()}, outf)
+            json.dump({key: obj.to_dict() for key, obj in self._index.items()}, outf)
 
         with open(f'{self.storage_path}/meta.json', 'w') as outf:
             json.dump(self._meta, outf)
