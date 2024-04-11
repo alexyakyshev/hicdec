@@ -3,9 +3,8 @@ from cooler import Cooler
 import cooltools
 import bioframe
 import os
-import numpy as np
 import pandas as pd
-from ....utils.common import nan_interpolator
+from .utils import nan_interpolator
 
 
 class CompartmentFeature(Feature):
@@ -84,12 +83,3 @@ class CompartmentFeature(Feature):
 
     def get_feature_by_index(self, id: int):
         return self.memmap[id, :]
-
-    def create_memmap(self, window_size: int, max_windows: int):
-        if os.path.exists(self.path) and os.path.isfile(self.path):
-            raise FileExistsError(f'File {self.path} already exist')
-        else:
-            self.memmap = np.memmap(self.path, 'w+', dtype=np.loat64, shape=(max_windows, window_size))
-
-    def load_memmap(self):
-        self.memmap = np.memmap(self.path, 'r+')

@@ -1,6 +1,6 @@
 from .base import Feature
 import pandas as pd
-from ....utils.common import nan_interpolator
+from .utils import nan_interpolator
 
 
 class StripesFeature(Feature):

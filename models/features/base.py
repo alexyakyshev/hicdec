@@ -23,10 +23,13 @@ class Feature(ABC):
         if os.path.exists(self.path) and os.path.isfile(self.path):
             raise FileExistsError(f'File {self.path} already exist')
         else:
-            self.memmap = np.memmap(self.path, 'w+', dtype=np.loat64, shape=(max_windows, window_size))
+            self.memmap = np.memmap(self.path, mode='w+', dtype=np.float64, shape=(max_windows, window_size))
 
     def load_memmap(self):
-        self.memmap = np.memmap(self.path, 'r+')
+        self.memmap = np.memmap(self.path, mode='r+')
+
+    def save_memmap(self):
+        self.memmap.flush()
 
     def save_position(
         self,
@@ -35,5 +38,5 @@ class Feature(ABC):
         idx: int
     ):
         pos_arr = self.get_feature_by_postition(start, end)
-        self.memmap[idx, :, :] = pos_arr
+        self.memmap[idx, :] = pos_arr
         return hashlib.sha256(pos_arr).hexdigest()

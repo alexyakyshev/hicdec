@@ -3,7 +3,7 @@ from cooler import Cooler
 from cooltools import insulation
 import os
 import pandas as pd
-from ....utils.common import nan_interpolator
+from .utils import nan_interpolator
 
 
 class InsulationFeature(Feature):
@@ -13,6 +13,7 @@ class InsulationFeature(Feature):
     ):
         self.name = 'insulation'
         self.path = base_path + '/.insulatuion.npy'
+        self.base_path = base_path
 
     def load(
         self,
