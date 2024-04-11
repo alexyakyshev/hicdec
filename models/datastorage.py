@@ -137,7 +137,7 @@ class DiscStorage():
                     val = feature.save_position(left_border, right_border, length)
                     row.set_feature(feature.name, val)
                 self._index[length] = row
-            length += 1
+                length += 1
 
             if length % 100 == 0:
                 print(f"Loaded {length} maps")
