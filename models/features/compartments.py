@@ -29,7 +29,7 @@ class CompartmentFeature(Feature):
         if not os.path.isfile(f'{self.base_path}/{genome_name}_gc_cov_{compartment_res//1000}kb.tsv'):
             genome = bioframe.load_fasta(f'{self.base_path}/{genome_name}')
             gc_cov = bioframe.frac_gc(bins[['chrom', 'start', 'end']], genome)
-            gc_cov.to_csv(f'{genome_name}_gc_cov_{compartment_res//1000}kb.tsv', index=False, sep='\t')
+            gc_cov.to_csv(f'{self.base_path}/{genome_name}_gc_cov_{compartment_res//1000}kb.tsv', index=False, sep='\t')
         else:
             gc_cov = pd.read_csv(f'{self.base_path}/tmp/{genome_name}_gc_cov_{compartment_res//1000}kb.tsv', sep='\t')
 
