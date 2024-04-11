@@ -29,7 +29,6 @@ class StripesFeature(Feature):
 
     def to_dict(self):
         return dict(
-            name=self.name,
-            path=self.path,
+            super().to_dict(),
             stripes_file=self.stripes_file
         )

@@ -12,9 +12,15 @@ class Feature(ABC):
     def get_feature_by_postition(self, start: int, end: int):
         pass
 
-    @abstractmethod
     def to_dict(self):
-        pass
+        return dict(
+            name=self.name,
+            path=self.path,
+            min=self.min,
+            max=self.max,
+            mean=self.mean,
+            std=self.std
+        )
 
     def get_feature_by_index(self, id: int):
         return self.memmap[id, :]
@@ -40,3 +46,10 @@ class Feature(ABC):
         pos_arr = self.get_feature_by_postition(start, end)
         self.memmap[idx, :] = pos_arr
         return hashlib.sha256(pos_arr).hexdigest()
+
+    def generate_meta(self, length):
+        feature_slice = self.memmap[:length, :]
+        self.min = feature_slice.min()
+        self.max = feature_slice.max()
+        self.mean = feature_slice.mean()
+        self.std = feature_slice.std()

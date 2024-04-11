@@ -41,7 +41,6 @@ class InsulationFeature(Feature):
 
     def to_dict(self):
         return dict(
-            name=self.name,
-            path=self.path,
+            super().to_dict(),
             insulation_window=self.insulation_window
         )
