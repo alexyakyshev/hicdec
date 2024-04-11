@@ -72,7 +72,7 @@ class CompartmentFeature(Feature):
         start: int,
         end: int
     ):
-        return self.compartment_df[start:end]['E1'].to_numpy()
+        return self.compartment_table[start:end]['E1'].to_numpy()
 
     def to_dict(self):
         return dict(
