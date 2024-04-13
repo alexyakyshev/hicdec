@@ -15,7 +15,7 @@ class DiscRow():
     end_position: int
 
     def __init__(self, idx, start_position, end_position, *features):
-        self.idx = idx
+        self.idx = int(idx)
         self.start_position = start_position
         self.end_position = end_position
         self.map = None
@@ -37,9 +37,9 @@ class DiscRow():
             files = json.load(inf)
         blank = dict()
         for key, val in files.items():
-            blank[key] = object.__new__(DiscRow)
-            blank[key].__dict__.update(val)
-        return files
+            blank[int(key)] = object.__new__(DiscRow)
+            blank[int(key)].__dict__.update(val)
+        return blank
 
     def get_row(self, idx, map_array, *features):
         out = dict()
