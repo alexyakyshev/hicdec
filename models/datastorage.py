@@ -140,6 +140,7 @@ class DiscStorage():
                 print(f"Loaded {length} maps")
         self._meta['length'] = length
         self.map_array.flush()
+        self._meta['memmap_shape'] = self.map_array.shape
         for feature in self.features:
             feature.save_memmap()
             feature.generate_meta(self._meta['length'])
@@ -158,7 +159,7 @@ class DiscStorage():
 
     def load_index(self):
         self.clr = cooler.Cooler(f'{self.storage_path}/{self.cooler_name}::resolutions/{self._meta["resolution"]}')
-        self.map_array = np.memmap(f"{self.storage_path}/.maps.npy", mode='r')
+        self.map_array = np.memmap(f"{self.storage_path}/.maps.npy", mode='r', shape=self._meta['memmap_shape'])
         with open(f'{self.storage_path}/features.pkl', 'rb') as inf:
             self.features = pickle.load(inf)
         self._index = DiscRow.from_json(f'{self.storage_path}/index.json')

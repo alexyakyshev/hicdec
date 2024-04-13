@@ -19,7 +19,8 @@ class Feature(ABC):
             min=self.min,
             max=self.max,
             mean=self.mean,
-            std=self.std
+            std=self.std,
+            memmap_shape=self.memmap_shape
         )
 
     def get_feature_by_index(self, id: int):
@@ -30,9 +31,10 @@ class Feature(ABC):
             raise FileExistsError(f'File {self.path} already exist')
         else:
             self.memmap = np.memmap(self.path, mode='w+', dtype=np.float64, shape=(max_windows, window_size))
+            self.memmap_shape = (max_windows, window_size)
 
     def load_memmap(self):
-        self.memmap = np.memmap(self.path, mode='r+')
+        self.memmap = np.memmap(self.path, shape=self.memmap_shape, mode='r+')
 
     def save_memmap(self):
         self.memmap.flush()
