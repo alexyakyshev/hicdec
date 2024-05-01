@@ -75,7 +75,7 @@ class HiCMapDataset(torch.utils.data.Dataset):
         item = from_storage['map']
         item = torch.from_numpy(item).reshape(1, self._slice_size, self._slice_size).float()
         features = [from_storage[el.name] for el in self.features]
-        features = [torch.from_numpy(obj).reshape((self._slice_size, 1)).float() for obj in features]
+        features = [torch.from_numpy(obj).reshape((1, self._slice_size)).float() for obj in features]
         if self.is_fourier:
             features = [fft1d(obj) for obj in features]
             item = fft2d(item)
