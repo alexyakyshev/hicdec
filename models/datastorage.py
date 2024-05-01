@@ -185,5 +185,7 @@ class DiscStorage():
     def __len__(self):
         return self._meta['length']
 
-    def __getitem__(self, idx, norm_type=NormTypes.NONE):
+    def __getitem__(self, idx):
+        if isinstance(idx, tuple):
+            idx, norm_type = idx
         return self._index[idx].get_row(idx, self.map_array, norm_type, *self.features)
