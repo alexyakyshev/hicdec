@@ -1,7 +1,7 @@
 import torch
 import cooler
 from typing import List
-from featires.base import Feature
+from features.base import Feature
 from features.norm import NormTypes
 
 
