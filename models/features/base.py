@@ -26,12 +26,14 @@ class Feature(ABC):
     def get_feature_by_index(self, id: int):
         return self.memmap[id, :]
 
-    def create_memmap(self, window_size: int, max_windows: int):
+    def create_memmap(self, window_size: int, max_windows: int, force_rewrite: bool = False):
         if os.path.exists(self.path) and os.path.isfile(self.path):
-            raise FileExistsError(f'File {self.path} already exist')
-        else:
-            self.memmap = np.memmap(self.path, mode='w+', dtype=np.float64, shape=(max_windows, window_size))
-            self.memmap_shape = (max_windows, window_size)
+            if force_rewrite:
+                os.remove(self.path)
+            else:
+                raise FileExistsError(f'File {self.path} already exist')
+        self.memmap = np.memmap(self.path, mode='w+', dtype=np.float64, shape=(max_windows, window_size))
+        self.memmap_shape = (max_windows, window_size)
 
     def load_memmap(self):
         self.memmap = np.memmap(self.path, shape=self.memmap_shape, mode='r+')

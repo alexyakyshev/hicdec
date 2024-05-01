@@ -68,8 +68,9 @@ class DiscStorage():
 
     def __init__(
         self,
-        storage_path,
-        cooler_name
+        storage_path: str,
+        cooler_name: str,
+        force_rewrite: bool = False
     ):
 
         self.storage_path = storage_path
@@ -84,6 +85,14 @@ class DiscStorage():
         if not os.path.exists(f'{self.storage_path}/{self.cooler_name}'):
             raise FileNotFoundError('Cooler file did not exists')
 
+        if force_rewrite:
+            if os.path.exists(f'{self.storage_path}/meta.json'):
+                os.remove(f'{self.storage_path}/meta.json')
+            if os.path.exists(f'{self.storage_path}/.maps.npy'):
+                os.remove(f'{self.storage_path}/.maps.npy')
+            if os.path.exists(f'{self.storage_path}/.features.pkl'):
+                os.remove(f'{self.storage_path}/.features.pkl')
+
         if os.path.exists(self.storage_path+'/meta.json'):
             with open(self.storage_path+'/meta.json', 'r') as inf:
                 self._meta = json.load(inf)
@@ -94,7 +103,8 @@ class DiscStorage():
         self,
         resolution: int,  # Разрешение HiC-карты
         window_size: int,  # Размер окна (в бинах)
-        features: List[Feature]
+        features: List[Feature],
+        force_rewrite: bool = False
     ):
         self.features = features
         self._meta['resolution'] = resolution
@@ -109,7 +119,7 @@ class DiscStorage():
 
         self.map_array = np.memmap(f'{self.storage_path}/{self._meta["maps"]}', mode='w+', shape=(raw_length, window_size, window_size), dtype=np.float64)
         for ft in self.features:
-            ft.create_memmap(window_size, raw_length)
+            ft.create_memmap(window_size, raw_length, force_rewrite)
 
         length = 0
         self._index = dict()
