@@ -61,11 +61,11 @@ class Feature(ABC):
 
     def norm(self, value, norm_type):
         match norm_type:
-            case NormTypes.EMPTY:
+            case NormTypes.NONE:
                 return empty_norm(value)
             case NormTypes.MINMAX:
                 return minmax_norm(value, self.min, self.max)
-            case NormTypes.Z:
+            case NormTypes.ZNORM:
                 return z_norm(value, self.mean, self.std)
             case _:
                 raise ValueError(f'Unknown norm type {norm_type}')
