@@ -1,5 +1,5 @@
 import torch
-from cooltools import cooler
+import cooler
 from typing import List
 from featires.base import Feature
 from features.norm import NormTypes
