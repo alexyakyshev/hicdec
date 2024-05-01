@@ -2,7 +2,7 @@ import torch
 import cooler
 from typing import List
 from .features.base import Feature
-from .features.norm import NormTypes
+from .features.norms import NormTypes
 
 
 def fft2d(x):
