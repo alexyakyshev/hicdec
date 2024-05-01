@@ -6,6 +6,7 @@ import os
 import pickle
 import json
 from .features.base import Feature
+from .features.norms import NormTypes
 from .utils import hic_transform
 
 
@@ -41,7 +42,13 @@ class DiscRow():
             blank[int(key)].__dict__.update(val)
         return blank
 
-    def get_row(self, idx, map_array, *features):
+    def get_row(
+        self,
+        idx: int,
+        map_array: np.memmap,
+        norm_type: NormTypes,
+        *features
+    ):
         out = dict()
         if self.idx != idx:
             raise ValueError('Wrong idx')
@@ -60,6 +67,7 @@ class DiscRow():
             feature_val = np.ascontiguousarray(feature.get_feature_by_index(idx))
             if hashlib.sha256(feature_val).hexdigest() != self.__getattribute__(feature_name):
                 raise ValueError(f'Wrong feature {feature_name}')
+            feature_val = feature.norm(feature_val, norm_type)
             out[feature_name] = feature_val
         return out
 
@@ -177,5 +185,5 @@ class DiscStorage():
     def __len__(self):
         return self._meta['length']
 
-    def __getitem__(self, idx):
-        return self._index[idx].get_row(idx, self.map_array, *self.features)
+    def __getitem__(self, idx, norm_type=NormTypes.NONE):
+        return self._index[idx].get_row(idx, self.map_array, norm_type, *self.features)
