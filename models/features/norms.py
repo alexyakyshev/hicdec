@@ -7,19 +7,13 @@ class NormTypes(Enum):
     ZNORM = 2
 
 
-def empty_norm():
-    def wrapped(el):
-        return el
-    return wrapped
+def empty_norm(el):
+    return el
 
 
-def minmax_norm(minimum, maximum):
-    def wrapped(el, mi=minimum, ma=maximum):
-        return (el - mi) / (ma - mi)
-    return wrapped
+def minmax_norm(el, minimum, maximum):
+    return (el - minimum) / (maximum - minimum)
 
 
-def z_norm(mean, std):
-    def wrapped(el, m=mean, s=std):
-        return (el - m) / s
-    return wrapped
+def z_norm(el, mean, std):
+    return (el - mean) / std
