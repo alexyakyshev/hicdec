@@ -105,7 +105,7 @@ class DiscStorage():
         self.clr = cooler.Cooler(f'{self.storage_path}/{self.cooler_name}::resolutions/{resolution}')
 
         input_shape = self.clr.shape[0]
-        raw_length = input_shape // window_size * 2
+        raw_length = int(input_shape // window_size * 2)
 
         self.map_array = np.memmap(f'{self.storage_path}/{self._meta["maps"]}', mode='w+', shape=(raw_length, window_size, window_size), dtype=np.float64)
         for ft in self.features:
