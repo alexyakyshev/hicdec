@@ -71,7 +71,7 @@ class HiCMapDataset(torch.utils.data.Dataset):
         return self.length
 
     def __getitem__(self, idx):
-        from_storage = self.datastorage[self.new_index[idx]]
+        from_storage = self.datastorage[self.new_index[idx], self.norm_type]
         item = from_storage['map']
         item = torch.from_numpy(item).reshape(1, self._slice_size, self._slice_size).float()
         features = [from_storage[el.name] for el in self.features]
