@@ -190,3 +190,6 @@ class DiscStorage():
         if isinstance(idx, tuple):
             idx, norm_type = idx
         return self._index[idx].get_row(idx, self.map_array, norm_type, *self.features)
+
+    def fast_get(self, idx):
+        return self._index[idx].to_dict()
