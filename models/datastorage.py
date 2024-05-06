@@ -133,7 +133,7 @@ class DiscStorage():
         self._index = dict()
         print(f'Start processing {self.cooler_name}, determine {raw_length} windows')
 
-        for idx in range(2, raw_length-2):  # пропускаем первую и последнюю карты
+        for idx in range(2, raw_length-3):  # пропускаем первую и последнюю карты
 
             left_border = window_size * idx // 2
             right_border = left_border + window_size
