@@ -4,6 +4,7 @@ import cooltools
 import bioframe
 import os
 import pandas as pd
+import numpy as np
 from .utils import nan_interpolator
 
 
@@ -22,7 +23,9 @@ class CompartmentFeature(Feature):
         cooler_obj: str,
         compartment_res: int,
         genome_name: str,
+        compartment_binarize: bool = False
     ):
+        self.compartment_binarize = compartment_binarize
         self.compartment_res = compartment_res
         clr_compartments = Cooler(f'{self.base_path}/{cooler_name}::resolutions/{compartment_res}')
         bins = clr_compartments.bins()[:]
@@ -72,7 +75,11 @@ class CompartmentFeature(Feature):
         start: int,
         end: int
     ):
-        return self.compartment_table[start:end]['E1'].to_numpy()
+        compartment_track = self.compartment_table[start:end]['E1'].to_numpy()
+        if self.compartment_binarize:
+            discretize = np.vectorize(lambda x: 1 if x > 0 else 0)
+            compartment_track = discretize(compartment_track)
+        return compartment_track
 
     def to_dict(self):
         return dict(

@@ -19,15 +19,17 @@ class InsulationFeature(Feature):
         self,
         resolution: int,
         cooler_entity: Cooler,
-        insulation_window: int
+        insulation_window: int,
+        transform_function: callable = None
     ):
         self.insulation_window = insulation_window
-        if not os.path.isfile(f'{self.base_path}/tmp/insulation_track.csv'):
+        self.transform_function = transform_function
+        if not os.path.isfile(f'{self.base_path}/tmp/insulation_track_{resolution//1000}kb.csv'):
             windows = [3*resolution, 5*resolution, 10*resolution, 25*resolution]
             self.insulation_table = insulation(cooler_entity, windows, verbose=True)
-            self.insulation_table.to_csv(f'{self.base_path}/tmp/insulation_track.csv', index=False, sep='\t')
+            self.insulation_table.to_csv(f'{self.base_path}/tmp/insulation_track_{resolution//1000}kb.csv', index=False, sep='\t')
         else:
-            self.insulation_table = pd.read_csv(f'{self.base_path}/tmp/insulation_track.csv', sep='\t')
+            self.insulation_table = pd.read_csv(f'{self.base_path}/tmp/insulation_track_{resolution//1000}kb.csv', sep='\t')
 
     def get_feature_by_postition(
         self,
@@ -35,7 +37,10 @@ class InsulationFeature(Feature):
         end: int
     ):
         local_track = self.insulation_table.iloc[start:end, :]
-        local_track = local_track[self.insulation_window].to_numpy()
+        local_track = local_track[self.insulation_window]
+        if self.transform_function is not None:
+            local_track = local_track.apply(self.transform_function)
+        local_track = local_track.to_numpy()
         local_track = nan_interpolator(local_track)
         return local_track
 
