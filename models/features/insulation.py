@@ -20,10 +20,10 @@ class InsulationFeature(Feature):
         resolution: int,
         cooler_entity: Cooler,
         insulation_window: int,
-        transform_function: callable = None
+        transform: bool = False
     ):
         self.insulation_window = insulation_window
-        self.transform_function = transform_function
+        self.transform = transform
         if not os.path.isfile(f'{self.base_path}/tmp/insulation_track_{resolution//1000}kb.csv'):
             windows = [3*resolution, 5*resolution, 10*resolution, 25*resolution]
             self.insulation_table = insulation(cooler_entity, windows, verbose=True)
@@ -38,8 +38,8 @@ class InsulationFeature(Feature):
     ):
         local_track = self.insulation_table.iloc[start:end, :]
         local_track = local_track[self.insulation_window]
-        if self.transform_function is not None:
-            local_track = local_track.apply(self.transform_function)
+        if self.transform:
+            local_track = local_track.apply(lambda x: int(x))
         local_track = local_track.to_numpy()
         local_track = nan_interpolator(local_track)
         return local_track
