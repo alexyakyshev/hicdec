@@ -77,7 +77,7 @@ class CompartmentFeature(Feature):
     ):
         compartment_track = self.compartment_table[start:end]['E1'].to_numpy()
         if self.compartment_binarize:
-            discretize = np.vectorize(lambda x: 1 if x > 0 else 0)
+            discretize = np.vectorize(lambda x: np.float64(1) if x > 0 else np.float64(0))
             compartment_track = discretize(compartment_track)
         return compartment_track
 

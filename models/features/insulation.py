@@ -3,6 +3,7 @@ from cooler import Cooler
 from cooltools import insulation
 import os
 import pandas as pd
+import numpy as np
 from .utils import nan_interpolator
 
 
@@ -39,7 +40,7 @@ class InsulationFeature(Feature):
         local_track = self.insulation_table.iloc[start:end, :]
         local_track = local_track[self.insulation_window]
         if self.transform:
-            local_track = local_track.apply(lambda x: int(x))
+            local_track = local_track.apply(lambda x: np.float64(int(x)))
         local_track = local_track.to_numpy()
         local_track = nan_interpolator(local_track)
         return local_track
